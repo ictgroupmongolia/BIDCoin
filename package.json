@@ -9,6 +9,8 @@
   "author": "khaschuluu@ictgroup.mn",
   "license": "UNLICENSED",
   "dependencies": {
-    "@openzeppelin/contracts": "2.5.1"
+    "@openzeppelin/contracts": "^4.3.2",
+    "truffle": "^5.4.11",
+    "truffle-flattener": "github:jplew/truffle-flattener"
   }
 }

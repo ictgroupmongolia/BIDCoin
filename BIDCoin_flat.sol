@@ -1,36 +1,8 @@
-// File: @openzeppelin/contracts/GSN/Context.sol
-
-pragma solidity ^0.5.0;
-
-/*
- * @dev Provides information about the current execution context, including the
- * sender of the transaction and its data. While these are generally available
- * via msg.sender and msg.data, they should not be accessed in such a direct
- * manner, since when dealing with GSN meta-transactions the account sending and
- * paying for execution may not be the actual sender (as far as an application
- * is concerned).
- *
- * This contract is only required for intermediate, library-like contracts.
- */
-contract Context {
-    // Empty internal constructor, to prevent people from mistakenly deploying
-    // an instance of this contract, which should be used via inheritance.
-    constructor () internal { }
-    // solhint-disable-previous-line no-empty-blocks
-
-    function _msgSender() internal view returns (address payable) {
-        return msg.sender;
-    }
-
-    function _msgData() internal view returns (bytes memory) {
-        this; // silence state mutability warning without generating bytecode - see https://github.com/ethereum/solidity/issues/2691
-        return msg.data;
-    }
-}
-
 // File: @openzeppelin/contracts/token/ERC777/IERC777.sol
 
-pragma solidity ^0.5.0;
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.0;
 
 /**
  * @dev Interface of the ERC777Token standard as defined in the EIP.
@@ -88,7 +60,11 @@ interface IERC777 {
      * - if `recipient` is a contract, it must implement the {IERC777Recipient}
      * interface.
      */
-    function send(address recipient, uint256 amount, bytes calldata data) external;
+    function send(
+        address recipient,
+        uint256 amount,
+        bytes calldata data
+    ) external;
 
     /**
      * @dev Destroys `amount` tokens from the caller's account, reducing the
@@ -128,7 +104,7 @@ interface IERC777 {
     function authorizeOperator(address operator) external;
 
     /**
-     * @dev Make an account an operator of the caller.
+     * @dev Revoke an account's operator status for the caller.
      *
      * See {isOperatorFor} and {defaultOperators}.
      *
@@ -178,7 +154,7 @@ interface IERC777 {
     ) external;
 
     /**
-     * @dev Destoys `amount` tokens from `account`, reducing the total supply.
+     * @dev Destroys `amount` tokens from `account`, reducing the total supply.
      * The caller must be an operator of `account`.
      *
      * If a send hook is registered for `account`, the corresponding function
@@ -219,7 +195,7 @@ interface IERC777 {
 
 // File: @openzeppelin/contracts/token/ERC777/IERC777Recipient.sol
 
-pragma solidity ^0.5.0;
+pragma solidity ^0.8.0;
 
 /**
  * @dev Interface of the ERC777TokensRecipient standard as defined in the EIP.
@@ -254,14 +230,14 @@ interface IERC777Recipient {
 
 // File: @openzeppelin/contracts/token/ERC777/IERC777Sender.sol
 
-pragma solidity ^0.5.0;
+pragma solidity ^0.8.0;
 
 /**
  * @dev Interface of the ERC777TokensSender standard as defined in the EIP.
  *
  * {IERC777} Token holders can be notified of operations performed on their
  * tokens by having a contract implement this interface (contract holders can be
- *  their own implementer) and registering it on the
+ * their own implementer) and registering it on the
  * https://eips.ethereum.org/EIPS/eip-1820[ERC1820 global registry].
  *
  * See {IERC1820Registry} and {ERC1820Implementer}.
@@ -289,11 +265,10 @@ interface IERC777Sender {
 
 // File: @openzeppelin/contracts/token/ERC20/IERC20.sol
 
-pragma solidity ^0.5.0;
+pragma solidity ^0.8.0;
 
 /**
- * @dev Interface of the ERC20 standard as defined in the EIP. Does not include
- * the optional functions; to access them see {ERC20Detailed}.
+ * @dev Interface of the ERC20 standard as defined in the EIP.
  */
 interface IERC20 {
     /**
@@ -349,7 +324,11 @@ interface IERC20 {
      *
      * Emits a {Transfer} event.
      */
-    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
+    function transferFrom(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) external returns (bool);
 
     /**
      * @dev Emitted when `value` tokens are moved from one account (`from`) to
@@ -366,168 +345,9 @@ interface IERC20 {
     event Approval(address indexed owner, address indexed spender, uint256 value);
 }
 
-// File: @openzeppelin/contracts/math/SafeMath.sol
-
-pragma solidity ^0.5.0;
-
-/**
- * @dev Wrappers over Solidity's arithmetic operations with added overflow
- * checks.
- *
- * Arithmetic operations in Solidity wrap on overflow. This can easily result
- * in bugs, because programmers usually assume that an overflow raises an
- * error, which is the standard behavior in high level programming languages.
- * `SafeMath` restores this intuition by reverting the transaction when an
- * operation overflows.
- *
- * Using this library instead of the unchecked operations eliminates an entire
- * class of bugs, so it's recommended to use it always.
- */
-library SafeMath {
-    /**
-     * @dev Returns the addition of two unsigned integers, reverting on
-     * overflow.
-     *
-     * Counterpart to Solidity's `+` operator.
-     *
-     * Requirements:
-     * - Addition cannot overflow.
-     */
-    function add(uint256 a, uint256 b) internal pure returns (uint256) {
-        uint256 c = a + b;
-        require(c >= a, "SafeMath: addition overflow");
-
-        return c;
-    }
-
-    /**
-     * @dev Returns the subtraction of two unsigned integers, reverting on
-     * overflow (when the result is negative).
-     *
-     * Counterpart to Solidity's `-` operator.
-     *
-     * Requirements:
-     * - Subtraction cannot overflow.
-     */
-    function sub(uint256 a, uint256 b) internal pure returns (uint256) {
-        return sub(a, b, "SafeMath: subtraction overflow");
-    }
-
-    /**
-     * @dev Returns the subtraction of two unsigned integers, reverting with custom message on
-     * overflow (when the result is negative).
-     *
-     * Counterpart to Solidity's `-` operator.
-     *
-     * Requirements:
-     * - Subtraction cannot overflow.
-     *
-     * _Available since v2.4.0._
-     */
-    function sub(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
-        require(b <= a, errorMessage);
-        uint256 c = a - b;
-
-        return c;
-    }
-
-    /**
-     * @dev Returns the multiplication of two unsigned integers, reverting on
-     * overflow.
-     *
-     * Counterpart to Solidity's `*` operator.
-     *
-     * Requirements:
-     * - Multiplication cannot overflow.
-     */
-    function mul(uint256 a, uint256 b) internal pure returns (uint256) {
-        // Gas optimization: this is cheaper than requiring 'a' not being zero, but the
-        // benefit is lost if 'b' is also tested.
-        // See: https://github.com/OpenZeppelin/openzeppelin-contracts/pull/522
-        if (a == 0) {
-            return 0;
-        }
-
-        uint256 c = a * b;
-        require(c / a == b, "SafeMath: multiplication overflow");
-
-        return c;
-    }
-
-    /**
-     * @dev Returns the integer division of two unsigned integers. Reverts on
-     * division by zero. The result is rounded towards zero.
-     *
-     * Counterpart to Solidity's `/` operator. Note: this function uses a
-     * `revert` opcode (which leaves remaining gas untouched) while Solidity
-     * uses an invalid opcode to revert (consuming all remaining gas).
-     *
-     * Requirements:
-     * - The divisor cannot be zero.
-     */
-    function div(uint256 a, uint256 b) internal pure returns (uint256) {
-        return div(a, b, "SafeMath: division by zero");
-    }
-
-    /**
-     * @dev Returns the integer division of two unsigned integers. Reverts with custom message on
-     * division by zero. The result is rounded towards zero.
-     *
-     * Counterpart to Solidity's `/` operator. Note: this function uses a
-     * `revert` opcode (which leaves remaining gas untouched) while Solidity
-     * uses an invalid opcode to revert (consuming all remaining gas).
-     *
-     * Requirements:
-     * - The divisor cannot be zero.
-     *
-     * _Available since v2.4.0._
-     */
-    function div(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
-        // Solidity only automatically asserts when dividing by 0
-        require(b > 0, errorMessage);
-        uint256 c = a / b;
-        // assert(a == b * c + a % b); // There is no case in which this doesn't hold
-
-        return c;
-    }
-
-    /**
-     * @dev Returns the remainder of dividing two unsigned integers. (unsigned integer modulo),
-     * Reverts when dividing by zero.
-     *
-     * Counterpart to Solidity's `%` operator. This function uses a `revert`
-     * opcode (which leaves remaining gas untouched) while Solidity uses an
-     * invalid opcode to revert (consuming all remaining gas).
-     *
-     * Requirements:
-     * - The divisor cannot be zero.
-     */
-    function mod(uint256 a, uint256 b) internal pure returns (uint256) {
-        return mod(a, b, "SafeMath: modulo by zero");
-    }
-
-    /**
-     * @dev Returns the remainder of dividing two unsigned integers. (unsigned integer modulo),
-     * Reverts with custom message when dividing by zero.
-     *
-     * Counterpart to Solidity's `%` operator. This function uses a `revert`
-     * opcode (which leaves remaining gas untouched) while Solidity uses an
-     * invalid opcode to revert (consuming all remaining gas).
-     *
-     * Requirements:
-     * - The divisor cannot be zero.
-     *
-     * _Available since v2.4.0._
-     */
-    function mod(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
-        require(b != 0, errorMessage);
-        return a % b;
-    }
-}
-
 // File: @openzeppelin/contracts/utils/Address.sol
 
-pragma solidity ^0.5.5;
+pragma solidity ^0.8.0;
 
 /**
  * @dev Collection of functions related to the address type
@@ -541,7 +361,7 @@ library Address {
      * It is unsafe to assume that an address for which this function returns
      * false is an externally-owned account (EOA) and not a contract.
      *
-     * Among others, `isContract` will return false for the following 
+     * Among others, `isContract` will return false for the following
      * types of addresses:
      *
      *  - an externally-owned account
@@ -551,24 +371,15 @@ library Address {
      * ====
      */
     function isContract(address account) internal view returns (bool) {
-        // According to EIP-1052, 0x0 is the value returned for not-yet created accounts
-        // and 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470 is returned
-        // for accounts without code, i.e. `keccak256('')`
-        bytes32 codehash;
-        bytes32 accountHash = 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470;
-        // solhint-disable-next-line no-inline-assembly
-        assembly { codehash := extcodehash(account) }
-        return (codehash != accountHash && codehash != 0x0);
-    }
+        // This method relies on extcodesize, which returns 0 for contracts in
+        // construction, since the code is only stored at the end of the
+        // constructor execution.
 
-    /**
-     * @dev Converts an `address` into `address payable`. Note that this is
-     * simply a type cast: the actual underlying value is not changed.
-     *
-     * _Available since v2.4.0._
-     */
-    function toPayable(address account) internal pure returns (address payable) {
-        return address(uint160(account));
+        uint256 size;
+        assembly {
+            size := extcodesize(account)
+        }
+        return size > 0;
     }
 
     /**
@@ -586,21 +397,198 @@ library Address {
      * taken to not create reentrancy vulnerabilities. Consider using
      * {ReentrancyGuard} or the
      * https://solidity.readthedocs.io/en/v0.5.11/security-considerations.html#use-the-checks-effects-interactions-pattern[checks-effects-interactions pattern].
-     *
-     * _Available since v2.4.0._
      */
     function sendValue(address payable recipient, uint256 amount) internal {
         require(address(this).balance >= amount, "Address: insufficient balance");
 
-        // solhint-disable-next-line avoid-call-value
-        (bool success, ) = recipient.call.value(amount)("");
+        (bool success, ) = recipient.call{value: amount}("");
         require(success, "Address: unable to send value, recipient may have reverted");
+    }
+
+    /**
+     * @dev Performs a Solidity function call using a low level `call`. A
+     * plain `call` is an unsafe replacement for a function call: use this
+     * function instead.
+     *
+     * If `target` reverts with a revert reason, it is bubbled up by this
+     * function (like regular Solidity function calls).
+     *
+     * Returns the raw returned data. To convert to the expected return value,
+     * use https://solidity.readthedocs.io/en/latest/units-and-global-variables.html?highlight=abi.decode#abi-encoding-and-decoding-functions[`abi.decode`].
+     *
+     * Requirements:
+     *
+     * - `target` must be a contract.
+     * - calling `target` with `data` must not revert.
+     *
+     * _Available since v3.1._
+     */
+    function functionCall(address target, bytes memory data) internal returns (bytes memory) {
+        return functionCall(target, data, "Address: low-level call failed");
+    }
+
+    /**
+     * @dev Same as {xref-Address-functionCall-address-bytes-}[`functionCall`], but with
+     * `errorMessage` as a fallback revert reason when `target` reverts.
+     *
+     * _Available since v3.1._
+     */
+    function functionCall(
+        address target,
+        bytes memory data,
+        string memory errorMessage
+    ) internal returns (bytes memory) {
+        return functionCallWithValue(target, data, 0, errorMessage);
+    }
+
+    /**
+     * @dev Same as {xref-Address-functionCall-address-bytes-}[`functionCall`],
+     * but also transferring `value` wei to `target`.
+     *
+     * Requirements:
+     *
+     * - the calling contract must have an ETH balance of at least `value`.
+     * - the called Solidity function must be `payable`.
+     *
+     * _Available since v3.1._
+     */
+    function functionCallWithValue(
+        address target,
+        bytes memory data,
+        uint256 value
+    ) internal returns (bytes memory) {
+        return functionCallWithValue(target, data, value, "Address: low-level call with value failed");
+    }
+
+    /**
+     * @dev Same as {xref-Address-functionCallWithValue-address-bytes-uint256-}[`functionCallWithValue`], but
+     * with `errorMessage` as a fallback revert reason when `target` reverts.
+     *
+     * _Available since v3.1._
+     */
+    function functionCallWithValue(
+        address target,
+        bytes memory data,
+        uint256 value,
+        string memory errorMessage
+    ) internal returns (bytes memory) {
+        require(address(this).balance >= value, "Address: insufficient balance for call");
+        require(isContract(target), "Address: call to non-contract");
+
+        (bool success, bytes memory returndata) = target.call{value: value}(data);
+        return verifyCallResult(success, returndata, errorMessage);
+    }
+
+    /**
+     * @dev Same as {xref-Address-functionCall-address-bytes-}[`functionCall`],
+     * but performing a static call.
+     *
+     * _Available since v3.3._
+     */
+    function functionStaticCall(address target, bytes memory data) internal view returns (bytes memory) {
+        return functionStaticCall(target, data, "Address: low-level static call failed");
+    }
+
+    /**
+     * @dev Same as {xref-Address-functionCall-address-bytes-string-}[`functionCall`],
+     * but performing a static call.
+     *
+     * _Available since v3.3._
+     */
+    function functionStaticCall(
+        address target,
+        bytes memory data,
+        string memory errorMessage
+    ) internal view returns (bytes memory) {
+        require(isContract(target), "Address: static call to non-contract");
+
+        (bool success, bytes memory returndata) = target.staticcall(data);
+        return verifyCallResult(success, returndata, errorMessage);
+    }
+
+    /**
+     * @dev Same as {xref-Address-functionCall-address-bytes-}[`functionCall`],
+     * but performing a delegate call.
+     *
+     * _Available since v3.4._
+     */
+    function functionDelegateCall(address target, bytes memory data) internal returns (bytes memory) {
+        return functionDelegateCall(target, data, "Address: low-level delegate call failed");
+    }
+
+    /**
+     * @dev Same as {xref-Address-functionCall-address-bytes-string-}[`functionCall`],
+     * but performing a delegate call.
+     *
+     * _Available since v3.4._
+     */
+    function functionDelegateCall(
+        address target,
+        bytes memory data,
+        string memory errorMessage
+    ) internal returns (bytes memory) {
+        require(isContract(target), "Address: delegate call to non-contract");
+
+        (bool success, bytes memory returndata) = target.delegatecall(data);
+        return verifyCallResult(success, returndata, errorMessage);
+    }
+
+    /**
+     * @dev Tool to verifies that a low level call was successful, and revert if it wasn't, either by bubbling the
+     * revert reason using the provided one.
+     *
+     * _Available since v4.3._
+     */
+    function verifyCallResult(
+        bool success,
+        bytes memory returndata,
+        string memory errorMessage
+    ) internal pure returns (bytes memory) {
+        if (success) {
+            return returndata;
+        } else {
+            // Look for revert reason and bubble it up if present
+            if (returndata.length > 0) {
+                // The easiest way to bubble the revert reason is using memory via assembly
+
+                assembly {
+                    let returndata_size := mload(returndata)
+                    revert(add(32, returndata), returndata_size)
+                }
+            } else {
+                revert(errorMessage);
+            }
+        }
     }
 }
 
-// File: @openzeppelin/contracts/introspection/IERC1820Registry.sol
+// File: @openzeppelin/contracts/utils/Context.sol
 
-pragma solidity ^0.5.0;
+pragma solidity ^0.8.0;
+
+/**
+ * @dev Provides information about the current execution context, including the
+ * sender of the transaction and its data. While these are generally available
+ * via msg.sender and msg.data, they should not be accessed in such a direct
+ * manner, since when dealing with meta-transactions the account sending and
+ * paying for execution may not be the actual sender (as far as an application
+ * is concerned).
+ *
+ * This contract is only required for intermediate, library-like contracts.
+ */
+abstract contract Context {
+    function _msgSender() internal view virtual returns (address) {
+        return msg.sender;
+    }
+
+    function _msgData() internal view virtual returns (bytes calldata) {
+        return msg.data;
+    }
+}
+
+// File: @openzeppelin/contracts/utils/introspection/IERC1820Registry.sol
+
+pragma solidity ^0.8.0;
 
 /**
  * @dev Interface of the global ERC1820 Registry, as defined in the
@@ -640,7 +628,7 @@ interface IERC1820Registry {
     function getManager(address account) external view returns (address);
 
     /**
-     * @dev Sets the `implementer` contract as `account`'s implementer for
+     * @dev Sets the `implementer` contract as ``account``'s implementer for
      * `interfaceHash`.
      *
      * `account` being the zero address is an alias for the caller's address.
@@ -659,7 +647,11 @@ interface IERC1820Registry {
      * queried for support, unless `implementer` is the caller. See
      * {IERC1820Implementer-canImplementInterfaceForAddress}.
      */
-    function setInterfaceImplementer(address account, bytes32 interfaceHash, address implementer) external;
+    function setInterfaceImplementer(
+        address account,
+        bytes32 _interfaceHash,
+        address implementer
+    ) external;
 
     /**
      * @dev Returns the implementer of `interfaceHash` for `account`. If no such
@@ -670,7 +662,7 @@ interface IERC1820Registry {
      *
      * `account` being the zero address is an alias for the caller's address.
      */
-    function getInterfaceImplementer(address account, bytes32 interfaceHash) external view returns (address);
+    function getInterfaceImplementer(address account, bytes32 _interfaceHash) external view returns (address);
 
     /**
      * @dev Returns the interface hash for an `interfaceName`, as defined in the
@@ -680,28 +672,28 @@ interface IERC1820Registry {
     function interfaceHash(string calldata interfaceName) external pure returns (bytes32);
 
     /**
-     *  @notice Updates the cache with whether the contract implements an ERC165 interface or not.
-     *  @param account Address of the contract for which to update the cache.
-     *  @param interfaceId ERC165 interface for which to update the cache.
+     * @notice Updates the cache with whether the contract implements an ERC165 interface or not.
+     * @param account Address of the contract for which to update the cache.
+     * @param interfaceId ERC165 interface for which to update the cache.
      */
     function updateERC165Cache(address account, bytes4 interfaceId) external;
 
     /**
-     *  @notice Checks whether a contract implements an ERC165 interface or not.
-     *  If the result is not cached a direct lookup on the contract address is performed.
-     *  If the result is not cached or the cached value is out-of-date, the cache MUST be updated manually by calling
-     *  {updateERC165Cache} with the contract address.
-     *  @param account Address of the contract to check.
-     *  @param interfaceId ERC165 interface to check.
-     *  @return True if `account` implements `interfaceId`, false otherwise.
+     * @notice Checks whether a contract implements an ERC165 interface or not.
+     * If the result is not cached a direct lookup on the contract address is performed.
+     * If the result is not cached or the cached value is out-of-date, the cache MUST be updated manually by calling
+     * {updateERC165Cache} with the contract address.
+     * @param account Address of the contract to check.
+     * @param interfaceId ERC165 interface to check.
+     * @return True if `account` implements `interfaceId`, false otherwise.
      */
     function implementsERC165Interface(address account, bytes4 interfaceId) external view returns (bool);
 
     /**
-     *  @notice Checks whether a contract implements an ERC165 interface or not without using nor updating the cache.
-     *  @param account Address of the contract to check.
-     *  @param interfaceId ERC165 interface to check.
-     *  @return True if `account` implements `interfaceId`, false otherwise.
+     * @notice Checks whether a contract implements an ERC165 interface or not without using nor updating the cache.
+     * @param account Address of the contract to check.
+     * @param interfaceId ERC165 interface to check.
+     * @return True if `account` implements `interfaceId`, false otherwise.
      */
     function implementsERC165InterfaceNoCache(address account, bytes4 interfaceId) external view returns (bool);
 
@@ -712,8 +704,7 @@ interface IERC1820Registry {
 
 // File: @openzeppelin/contracts/token/ERC777/ERC777.sol
 
-pragma solidity ^0.5.0;
-
+pragma solidity ^0.8.0;
 
 
 
@@ -738,10 +729,9 @@ pragma solidity ^0.5.0;
  * destroyed. This makes integration with ERC20 applications seamless.
  */
 contract ERC777 is Context, IERC777, IERC20 {
-    using SafeMath for uint256;
     using Address for address;
 
-    IERC1820Registry constant internal ERC1820_REGISTRY = IERC1820Registry(0x1820a4B7618BdE71Dce8cdc73aAB6C95905faD24);
+    IERC1820Registry internal constant _ERC1820_REGISTRY = IERC1820Registry(0x1820a4B7618BdE71Dce8cdc73aAB6C95905faD24);
 
     mapping(address => uint256) private _balances;
 
@@ -750,16 +740,8 @@ contract ERC777 is Context, IERC777, IERC20 {
     string private _name;
     string private _symbol;
 
-    // We inline the result of the following hashes because Solidity doesn't resolve them at compile time.
-    // See https://github.com/ethereum/solidity/issues/4024.
-
-    // keccak256("ERC777TokensSender")
-    bytes32 constant private TOKENS_SENDER_INTERFACE_HASH =
-        0x29ddb589b1fb5fc7cf394961c1adf5f8c6454761adf795e67fe149f658abe895;
-
-    // keccak256("ERC777TokensRecipient")
-    bytes32 constant private TOKENS_RECIPIENT_INTERFACE_HASH =
-        0xb281fc8c12954d22544db45de3159a39272895b169a852b314f9cc762e44c53b;
+    bytes32 private constant _TOKENS_SENDER_INTERFACE_HASH = keccak256("ERC777TokensSender");
+    bytes32 private constant _TOKENS_RECIPIENT_INTERFACE_HASH = keccak256("ERC777TokensRecipient");
 
     // This isn't ever read from - it's only used to respond to the defaultOperators query.
     address[] private _defaultOperatorsArray;
@@ -772,50 +754,50 @@ contract ERC777 is Context, IERC777, IERC20 {
     mapping(address => mapping(address => bool)) private _revokedDefaultOperators;
 
     // ERC20-allowances
-    mapping (address => mapping (address => uint256)) private _allowances;
+    mapping(address => mapping(address => uint256)) private _allowances;
 
     /**
      * @dev `defaultOperators` may be an empty array.
      */
     constructor(
-        string memory name,
-        string memory symbol,
-        address[] memory defaultOperators
-    ) public {
-        _name = name;
-        _symbol = symbol;
+        string memory name_,
+        string memory symbol_,
+        address[] memory defaultOperators_
+    ) {
+        _name = name_;
+        _symbol = symbol_;
 
-        _defaultOperatorsArray = defaultOperators;
-        for (uint256 i = 0; i < _defaultOperatorsArray.length; i++) {
-            _defaultOperators[_defaultOperatorsArray[i]] = true;
+        _defaultOperatorsArray = defaultOperators_;
+        for (uint256 i = 0; i < defaultOperators_.length; i++) {
+            _defaultOperators[defaultOperators_[i]] = true;
         }
 
         // register interfaces
-        ERC1820_REGISTRY.setInterfaceImplementer(address(this), keccak256("ERC777Token"), address(this));
-        ERC1820_REGISTRY.setInterfaceImplementer(address(this), keccak256("ERC20Token"), address(this));
+        _ERC1820_REGISTRY.setInterfaceImplementer(address(this), keccak256("ERC777Token"), address(this));
+        _ERC1820_REGISTRY.setInterfaceImplementer(address(this), keccak256("ERC20Token"), address(this));
     }
 
     /**
      * @dev See {IERC777-name}.
      */
-    function name() public view returns (string memory) {
+    function name() public view virtual override returns (string memory) {
         return _name;
     }
 
     /**
      * @dev See {IERC777-symbol}.
      */
-    function symbol() public view returns (string memory) {
+    function symbol() public view virtual override returns (string memory) {
         return _symbol;
     }
 
     /**
-     * @dev See {ERC20Detailed-decimals}.
+     * @dev See {ERC20-decimals}.
      *
      * Always returns 18, as per the
      * [ERC777 EIP](https://eips.ethereum.org/EIPS/eip-777#backward-compatibility).
      */
-    function decimals() public pure returns (uint8) {
+    function decimals() public pure virtual returns (uint8) {
         return 18;
     }
 
@@ -824,21 +806,21 @@ contract ERC777 is Context, IERC777, IERC20 {
      *
      * This implementation always returns `1`.
      */
-    function granularity() public view returns (uint256) {
+    function granularity() public view virtual override returns (uint256) {
         return 1;
     }
 
     /**
      * @dev See {IERC777-totalSupply}.
      */
-    function totalSupply() public view returns (uint256) {
+    function totalSupply() public view virtual override(IERC20, IERC777) returns (uint256) {
         return _totalSupply;
     }
 
     /**
      * @dev Returns the amount of tokens owned by an account (`tokenHolder`).
      */
-    function balanceOf(address tokenHolder) public view returns (uint256) {
+    function balanceOf(address tokenHolder) public view virtual override(IERC20, IERC777) returns (uint256) {
         return _balances[tokenHolder];
     }
 
@@ -847,8 +829,12 @@ contract ERC777 is Context, IERC777, IERC20 {
      *
      * Also emits a {IERC20-Transfer} event for ERC20 compatibility.
      */
-    function send(address recipient, uint256 amount, bytes memory data) public {
-        _send(_msgSender(), _msgSender(), recipient, amount, data, "", true);
+    function send(
+        address recipient,
+        uint256 amount,
+        bytes memory data
+    ) public virtual override {
+        _send(_msgSender(), recipient, amount, data, "", true);
     }
 
     /**
@@ -859,7 +845,7 @@ contract ERC777 is Context, IERC777, IERC20 {
      *
      * Also emits a {Sent} event.
      */
-    function transfer(address recipient, uint256 amount) public returns (bool) {
+    function transfer(address recipient, uint256 amount) public virtual override returns (bool) {
         require(recipient != address(0), "ERC777: transfer to the zero address");
 
         address from = _msgSender();
@@ -878,18 +864,16 @@ contract ERC777 is Context, IERC777, IERC20 {
      *
      * Also emits a {IERC20-Transfer} event for ERC20 compatibility.
      */
-    function burn(uint256 amount, bytes memory data) public {
-        _burn(_msgSender(), _msgSender(), amount, data, "");
+    function burn(uint256 amount, bytes memory data) public virtual override {
+        _burn(_msgSender(), amount, data, "");
     }
 
     /**
      * @dev See {IERC777-isOperatorFor}.
      */
-    function isOperatorFor(
-        address operator,
-        address tokenHolder
-    ) public view returns (bool) {
-        return operator == tokenHolder ||
+    function isOperatorFor(address operator, address tokenHolder) public view virtual override returns (bool) {
+        return
+            operator == tokenHolder ||
             (_defaultOperators[operator] && !_revokedDefaultOperators[tokenHolder][operator]) ||
             _operators[tokenHolder][operator];
     }
@@ -897,7 +881,7 @@ contract ERC777 is Context, IERC777, IERC20 {
     /**
      * @dev See {IERC777-authorizeOperator}.
      */
-    function authorizeOperator(address operator) public {
+    function authorizeOperator(address operator) public virtual override {
         require(_msgSender() != operator, "ERC777: authorizing self as operator");
 
         if (_defaultOperators[operator]) {
@@ -912,7 +896,7 @@ contract ERC777 is Context, IERC777, IERC20 {
     /**
      * @dev See {IERC777-revokeOperator}.
      */
-    function revokeOperator(address operator) public {
+    function revokeOperator(address operator) public virtual override {
         require(operator != _msgSender(), "ERC777: revoking self as operator");
 
         if (_defaultOperators[operator]) {
@@ -927,7 +911,7 @@ contract ERC777 is Context, IERC777, IERC20 {
     /**
      * @dev See {IERC777-defaultOperators}.
      */
-    function defaultOperators() public view returns (address[] memory) {
+    function defaultOperators() public view virtual override returns (address[] memory) {
         return _defaultOperatorsArray;
     }
 
@@ -942,11 +926,9 @@ contract ERC777 is Context, IERC777, IERC20 {
         uint256 amount,
         bytes memory data,
         bytes memory operatorData
-    )
-    public
-    {
+    ) public virtual override {
         require(isOperatorFor(_msgSender(), sender), "ERC777: caller is not an operator for holder");
-        _send(_msgSender(), sender, recipient, amount, data, operatorData, true);
+        _send(sender, recipient, amount, data, operatorData, true);
     }
 
     /**
@@ -954,9 +936,14 @@ contract ERC777 is Context, IERC777, IERC20 {
      *
      * Emits {Burned} and {IERC20-Transfer} events.
      */
-    function operatorBurn(address account, uint256 amount, bytes memory data, bytes memory operatorData) public {
+    function operatorBurn(
+        address account,
+        uint256 amount,
+        bytes memory data,
+        bytes memory operatorData
+    ) public virtual override {
         require(isOperatorFor(_msgSender(), account), "ERC777: caller is not an operator for holder");
-        _burn(_msgSender(), account, amount, data, operatorData);
+        _burn(account, amount, data, operatorData);
     }
 
     /**
@@ -966,7 +953,7 @@ contract ERC777 is Context, IERC777, IERC20 {
      * not have allowance, and accounts with allowance may not be operators
      * themselves.
      */
-    function allowance(address holder, address spender) public view returns (uint256) {
+    function allowance(address holder, address spender) public view virtual override returns (uint256) {
         return _allowances[holder][spender];
     }
 
@@ -975,22 +962,26 @@ contract ERC777 is Context, IERC777, IERC20 {
      *
      * Note that accounts cannot have allowance issued by their operators.
      */
-    function approve(address spender, uint256 value) public returns (bool) {
+    function approve(address spender, uint256 value) public virtual override returns (bool) {
         address holder = _msgSender();
         _approve(holder, spender, value);
         return true;
     }
 
-   /**
-    * @dev See {IERC20-transferFrom}.
-    *
-    * Note that operator and allowance concepts are orthogonal: operators cannot
-    * call `transferFrom` (unless they have allowance), and accounts with
-    * allowance cannot call `operatorSend` (unless they are operators).
-    *
-    * Emits {Sent}, {IERC20-Transfer} and {IERC20-Approval} events.
-    */
-    function transferFrom(address holder, address recipient, uint256 amount) public returns (bool) {
+    /**
+     * @dev See {IERC20-transferFrom}.
+     *
+     * Note that operator and allowance concepts are orthogonal: operators cannot
+     * call `transferFrom` (unless they have allowance), and accounts with
+     * allowance cannot call `operatorSend` (unless they are operators).
+     *
+     * Emits {Sent}, {IERC20-Transfer} and {IERC20-Approval} events.
+     */
+    function transferFrom(
+        address holder,
+        address recipient,
+        uint256 amount
+    ) public virtual override returns (bool) {
         require(recipient != address(0), "ERC777: transfer to the zero address");
         require(holder != address(0), "ERC777: transfer from the zero address");
 
@@ -999,7 +990,10 @@ contract ERC777 is Context, IERC777, IERC20 {
         _callTokensToSend(spender, holder, recipient, amount, "", "");
 
         _move(spender, holder, recipient, amount, "", "");
-        _approve(holder, spender, _allowances[holder][spender].sub(amount, "ERC777: transfer amount exceeds allowance"));
+
+        uint256 currentAllowance = _allowances[holder][spender];
+        require(currentAllowance >= amount, "ERC777: transfer amount exceeds allowance");
+        _approve(holder, spender, currentAllowance - amount);
 
         _callTokensReceived(spender, holder, recipient, amount, "", "", false);
 
@@ -1024,21 +1018,50 @@ contract ERC777 is Context, IERC777, IERC20 {
      * interface.
      */
     function _mint(
-        address operator,
         address account,
         uint256 amount,
         bytes memory userData,
         bytes memory operatorData
-    )
-    internal
-    {
+    ) internal virtual {
+        _mint(account, amount, userData, operatorData, true);
+    }
+
+    /**
+     * @dev Creates `amount` tokens and assigns them to `account`, increasing
+     * the total supply.
+     *
+     * If `requireReceptionAck` is set to true, and if a send hook is
+     * registered for `account`, the corresponding function will be called with
+     * `operator`, `data` and `operatorData`.
+     *
+     * See {IERC777Sender} and {IERC777Recipient}.
+     *
+     * Emits {Minted} and {IERC20-Transfer} events.
+     *
+     * Requirements
+     *
+     * - `account` cannot be the zero address.
+     * - if `account` is a contract, it must implement the {IERC777Recipient}
+     * interface.
+     */
+    function _mint(
+        address account,
+        uint256 amount,
+        bytes memory userData,
+        bytes memory operatorData,
+        bool requireReceptionAck
+    ) internal virtual {
         require(account != address(0), "ERC777: mint to the zero address");
 
-        // Update state variables
-        _totalSupply = _totalSupply.add(amount);
-        _balances[account] = _balances[account].add(amount);
+        address operator = _msgSender();
 
-        _callTokensReceived(operator, address(0), account, amount, userData, operatorData, true);
+        _beforeTokenTransfer(operator, address(0), account, amount);
+
+        // Update state variables
+        _totalSupply += amount;
+        _balances[account] += amount;
+
+        _callTokensReceived(operator, address(0), account, amount, userData, operatorData, requireReceptionAck);
 
         emit Minted(operator, account, amount, userData, operatorData);
         emit Transfer(address(0), account, amount);
@@ -1046,7 +1069,6 @@ contract ERC777 is Context, IERC777, IERC20 {
 
     /**
      * @dev Send tokens
-     * @param operator address operator requesting the transfer
      * @param from address token holder address
      * @param to address recipient address
      * @param amount uint256 amount of tokens to transfer
@@ -1055,19 +1077,17 @@ contract ERC777 is Context, IERC777, IERC20 {
      * @param requireReceptionAck if true, contract recipients are required to implement ERC777TokensRecipient
      */
     function _send(
-        address operator,
         address from,
         address to,
         uint256 amount,
         bytes memory userData,
         bytes memory operatorData,
         bool requireReceptionAck
-    )
-        internal
-    {
-        require(operator != address(0), "ERC777: operator is the zero address");
+    ) internal virtual {
         require(from != address(0), "ERC777: send from the zero address");
         require(to != address(0), "ERC777: send to the zero address");
+
+        address operator = _msgSender();
 
         _callTokensToSend(operator, from, to, amount, userData, operatorData);
 
@@ -1078,28 +1098,32 @@ contract ERC777 is Context, IERC777, IERC20 {
 
     /**
      * @dev Burn tokens
-     * @param operator address operator requesting the operation
      * @param from address token holder address
      * @param amount uint256 amount of tokens to burn
      * @param data bytes extra information provided by the token holder
      * @param operatorData bytes extra information provided by the operator (if any)
      */
     function _burn(
-        address operator,
         address from,
         uint256 amount,
         bytes memory data,
         bytes memory operatorData
-    )
-        internal
-    {
+    ) internal virtual {
         require(from != address(0), "ERC777: burn from the zero address");
+
+        address operator = _msgSender();
 
         _callTokensToSend(operator, from, address(0), amount, data, operatorData);
 
+        _beforeTokenTransfer(operator, from, address(0), amount);
+
         // Update state variables
-        _balances[from] = _balances[from].sub(amount, "ERC777: burn amount exceeds balance");
-        _totalSupply = _totalSupply.sub(amount);
+        uint256 fromBalance = _balances[from];
+        require(fromBalance >= amount, "ERC777: burn amount exceeds balance");
+        unchecked {
+            _balances[from] = fromBalance - amount;
+        }
+        _totalSupply -= amount;
 
         emit Burned(operator, from, amount, data, operatorData);
         emit Transfer(from, address(0), amount);
@@ -1112,11 +1136,15 @@ contract ERC777 is Context, IERC777, IERC20 {
         uint256 amount,
         bytes memory userData,
         bytes memory operatorData
-    )
-        private
-    {
-        _balances[from] = _balances[from].sub(amount, "ERC777: transfer amount exceeds balance");
-        _balances[to] = _balances[to].add(amount);
+    ) private {
+        _beforeTokenTransfer(operator, from, to, amount);
+
+        uint256 fromBalance = _balances[from];
+        require(fromBalance >= amount, "ERC777: transfer amount exceeds balance");
+        unchecked {
+            _balances[from] = fromBalance - amount;
+        }
+        _balances[to] += amount;
 
         emit Sent(operator, from, to, amount, userData, operatorData);
         emit Transfer(from, to, amount);
@@ -1127,7 +1155,11 @@ contract ERC777 is Context, IERC777, IERC20 {
      *
      * Note that accounts cannot have allowance issued by their operators.
      */
-    function _approve(address holder, address spender, uint256 value) internal {
+    function _approve(
+        address holder,
+        address spender,
+        uint256 value
+    ) internal {
         require(holder != address(0), "ERC777: approve from the zero address");
         require(spender != address(0), "ERC777: approve to the zero address");
 
@@ -1151,10 +1183,8 @@ contract ERC777 is Context, IERC777, IERC20 {
         uint256 amount,
         bytes memory userData,
         bytes memory operatorData
-    )
-        internal
-    {
-        address implementer = ERC1820_REGISTRY.getInterfaceImplementer(from, TOKENS_SENDER_INTERFACE_HASH);
+    ) private {
+        address implementer = _ERC1820_REGISTRY.getInterfaceImplementer(from, _TOKENS_SENDER_INTERFACE_HASH);
         if (implementer != address(0)) {
             IERC777Sender(implementer).tokensToSend(operator, from, to, amount, userData, operatorData);
         }
@@ -1179,28 +1209,55 @@ contract ERC777 is Context, IERC777, IERC20 {
         bytes memory userData,
         bytes memory operatorData,
         bool requireReceptionAck
-    )
-        internal
-    {
-        address implementer = ERC1820_REGISTRY.getInterfaceImplementer(to, TOKENS_RECIPIENT_INTERFACE_HASH);
+    ) private {
+        address implementer = _ERC1820_REGISTRY.getInterfaceImplementer(to, _TOKENS_RECIPIENT_INTERFACE_HASH);
         if (implementer != address(0)) {
             IERC777Recipient(implementer).tokensReceived(operator, from, to, amount, userData, operatorData);
         } else if (requireReceptionAck) {
             require(!to.isContract(), "ERC777: token recipient contract has no implementer for ERC777TokensRecipient");
         }
     }
+
+    /**
+     * @dev Hook that is called before any token transfer. This includes
+     * calls to {send}, {transfer}, {operatorSend}, minting and burning.
+     *
+     * Calling conditions:
+     *
+     * - when `from` and `to` are both non-zero, `amount` of ``from``'s tokens
+     * will be to transferred to `to`.
+     * - when `from` is zero, `amount` tokens will be minted for `to`.
+     * - when `to` is zero, `amount` of ``from``'s tokens will be burned.
+     * - `from` and `to` are never both zero.
+     *
+     * To learn more about hooks, head to xref:ROOT:extending-contracts.adoc#using-hooks[Using Hooks].
+     */
+    function _beforeTokenTransfer(
+        address operator,
+        address from,
+        address to,
+        uint256 amount
+    ) internal virtual {}
 }
 
 // File: contracts/BIDCoin.sol
 
 // contracts/BIDCoin.sol
-// SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.5.0;
+pragma solidity ^0.8.0;
 
 
 contract BIDCoin is ERC777 {
-    address[] private defaultOperator;
-    constructor() ERC777("BIDCoin", "BID", defaultOperator) public {
-        _mint(msg.sender, msg.sender, 1000000*10**18, "", "");
+    constructor(uint256 initialSupply, address[] memory defaultOperators)
+        ERC777("BIDCoin", "BID", defaultOperators)
+    {
+        _mint(msg.sender, initialSupply, "", "");
+    }
+
+    function operatorBurn(address, uint256, bytes calldata, bytes calldata) public virtual override {
+        revert();
+    }
+
+    function burn(uint256, bytes memory) public virtual override {
+        revert();
     }
 }
