@@ -1,20 +1,11 @@
-// contracts/BIDCoin.sol
+// contracts/GLDToken.sol
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC777/ERC777.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-contract BIDCoin is ERC777 {
-    constructor(uint256 initialSupply, address[] memory defaultOperators)
-        ERC777("BIDCoin", "BID", defaultOperators)
-    {
-        _mint(msg.sender, initialSupply, "", "");
-    }
-
-    function operatorBurn(address, uint256, bytes calldata, bytes calldata) public virtual override {
-        revert();
-    }
-
-    function burn(uint256, bytes memory) public virtual override {
-        revert();
+contract BIDCoin is ERC20 {
+    constructor(uint256 initialSupply) ERC20("BIDCoin", "BID") {
+        _mint(msg.sender, initialSupply);
     }
 }
