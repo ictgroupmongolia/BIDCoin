@@ -6,47 +6,49 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/TokenTimelock.sol";
 
 contract BIDCoin is ERC20 {
-    TokenTimelock public timelockBIDApp;
-    TokenTimelock public timelockBIDPay;
-    TokenTimelock public timelockBIDShop;
-    TokenTimelock public timelockTraditionalMarket;
-    TokenTimelock public timelockHRReward;
-    TokenTimelock public timelockMerchant;
-    TokenTimelock public timelockTrustBondCustomer;
-    TokenTimelock public timelockExternalMarketAirdrop;
-    TokenTimelock public timelockSocialResponsibilty;
+    TokenTimelock public timelockFintechProductReward;
+    TokenTimelock public timelockTraditionalProductReward;
+    TokenTimelock public timelockManagementTeamAdvisors;
+    TokenTimelock public timelockCustomersReward;
+    TokenTimelock public timelockInternationalListing;
+    TokenTimelock public timelockSocialResponsibility;
+    TokenTimelock public timelockProjectOwners;
+    TokenTimelock public timelockStrategicResource;
+    TokenTimelock public timelockBurn;
+
     constructor() ERC20("BIDCoin", "BID") {
+        uint fiveYears = 5*365*24*60*60;
+
         // IEO
-        _mint(0x27F9Ea3e7FAB17D730137Bf3Ba0A91793Aac2Ac2, 5000000000*10**18);
+        _mint(0x4B6BA7bf86A33a290cbdDfb11917854D62E3572e, 40000000000*10**18);
 
         // === 5 years lock start ===
-        // BID App
-        timelockBIDApp = new TokenTimelock(this, 0xC0638D0796fe5d040907A66B757E5f3C3348eAf6, block.timestamp + 5*365*24*60*60);
-        _mint(address(timelockBIDApp), 200000000*10**18);
-        // BID Pay
-        timelockBIDPay = new TokenTimelock(this, 0x82396E76B4E24aF3d1BED093b514b4aa7984F398, block.timestamp + 5*365*24*60*60);
-        _mint(address(timelockBIDPay), 200000000*10**18);
-        // BID Shop
-        timelockBIDShop = new TokenTimelock(this, 0x1B0FC8638c2fff4b638D144E52f297b7c38f688E, block.timestamp + 5*365*24*60*60);
-        _mint(address(timelockBIDShop), 300000000*10**18);
-        // Traditional market
-        timelockTraditionalMarket = new TokenTimelock(this, 0x145799d361AEA59F883b15D955B1ab4C84159fBF, block.timestamp + 5*365*24*60*60);
-        _mint(address(timelockTraditionalMarket), 200000000*10**18);
-        // HR reward
-        timelockHRReward = new TokenTimelock(this, 0x77C8285E8eb6D27995A83391938df58Ba65d1Dc4, block.timestamp + 5*365*24*60*60);
-        _mint(address(timelockHRReward), 300000000*10**18);
-        // Merchant
-        timelockMerchant = new TokenTimelock(this, 0x5759D00672e0E96793d9C740c779c990602Ce6C1, block.timestamp + 5*365*24*60*60);
-        _mint(address(timelockMerchant), 200000000*10**18);
-        // Trust, Bond customer
-        timelockTrustBondCustomer = new TokenTimelock(this, 0x67F07E55CC9CAC6958e452C32EeCA58e6B63c489, block.timestamp + 5*365*24*60*60);
-        _mint(address(timelockTrustBondCustomer), 150000000*10**18);
-        // External market, AIRDROP
-        timelockExternalMarketAirdrop = new TokenTimelock(this, 0xe2A95FA6DCa4C59caB5B5cBDbcC57D4a9aE77E74, block.timestamp + 5*365*24*60*60);
-        _mint(address(timelockExternalMarketAirdrop), 1602000000*10**18);
-        // Social responsibility
-        timelockSocialResponsibilty = new TokenTimelock(this, 0x54bDDDa4578eDdF43a486e8352cEd29021BE8a0d, block.timestamp + 5*365*24*60*60);
-        _mint(address(timelockSocialResponsibilty), 128000000*10**18);
+        timelockFintechProductReward = new TokenTimelock(this, 0x219A5C4d2941a40eB1A827b660CDEEb8155eAB1A, block.timestamp + fiveYears);
+        _mint(address(timelockFintechProductReward), 3000000000*10**18);
+
+        timelockTraditionalProductReward = new TokenTimelock(this, 0x9B91Ab136427266D0ab922007B24FA9f139BB13F, block.timestamp + fiveYears);
+        _mint(address(timelockTraditionalProductReward), 1500000000*10**18);
+
+        timelockManagementTeamAdvisors = new TokenTimelock(this, 0x231759F95Db947337fe0a242A512be2D491d8667, block.timestamp + fiveYears);
+        _mint(address(timelockManagementTeamAdvisors), 20000000000*10**18);
+
+        timelockCustomersReward = new TokenTimelock(this, 0x386dAC699F12afC2Ef2eE6841638c636b94B0d5D, block.timestamp + fiveYears);
+        _mint(address(timelockCustomersReward), 1000000000*10**18);
+
+        timelockInternationalListing = new TokenTimelock(this, 0x5c9A7C5d227E0FfFbe3C6696fb4df88cbe69d073, block.timestamp + fiveYears);
+        _mint(address(timelockInternationalListing), 40000000000*10**18);
+
+        timelockSocialResponsibility = new TokenTimelock(this, 0xC3e14541726D7a1066E26daA9f4103EC4138d403, block.timestamp + fiveYears);
+        _mint(address(timelockSocialResponsibility), 500000000*10**18);
+
+        timelockProjectOwners = new TokenTimelock(this, 0x8265Fc259F5b200eca5312B34F2888f614f33367, block.timestamp + fiveYears);
+        _mint(address(timelockProjectOwners), 24000000000*10**18);
+
+        timelockStrategicResource = new TokenTimelock(this, 0x2e0BaAAc84Abdad4157ff66C5475BB92c07aED76, block.timestamp + fiveYears);
+        _mint(address(timelockStrategicResource), 20000000000*10**18);
+
+        timelockBurn = new TokenTimelock(this, 0xF4cb809A6ab645e54c8a7BeDfeDee3331b269b40, block.timestamp + fiveYears);
+        _mint(address(timelockBurn), 10000000000*10**18);
         // === 5 years lock end ===
     }
 }
