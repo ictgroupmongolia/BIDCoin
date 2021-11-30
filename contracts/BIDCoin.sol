@@ -1,54 +1,112 @@
-// contracts/BIDCoin.sol
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.0;
+pragma solidity 0.8.9;
+
+// Author: Khashkhuu 'Xass1on' Gankhuyag
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/TokenTimelock.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-contract BIDCoin is ERC20 {
-    TokenTimelock public timelockFintechProductReward;
-    TokenTimelock public timelockTraditionalProductReward;
-    TokenTimelock public timelockManagementTeamAdvisors;
-    TokenTimelock public timelockCustomersReward;
-    TokenTimelock public timelockInternationalListing;
-    TokenTimelock public timelockSocialResponsibility;
-    TokenTimelock public timelockProjectOwners;
-    TokenTimelock public timelockStrategicResource;
-    TokenTimelock public timelockBurn;
+contract BIDCoin is ERC20, Ownable {
+    using SafeMath for uint256;
+    TokenTimelock public teamTimelock1;
+    TokenTimelock public teamTimelock2;
+    TokenTimelock public teamTimelock3;
+    TokenTimelock public teamTimelock4;
+    TokenTimelock public teamTimelock5;
 
-    constructor() ERC20("BIDCoin", "BID") {
-        uint fiveYears = 5*365*24*60*60;
+    uint256 constant _totalSupply = 3 * 10**10;
 
-        // IEO
-        _mint(0x4B6BA7bf86A33a290cbdDfb11917854D62E3572e, 40000000000*10**18);
+    uint256 constant _tokenToOffer = 1.5 * 10**10;
 
-        // === 5 years lock start ===
-        timelockFintechProductReward = new TokenTimelock(this, 0x219A5C4d2941a40eB1A827b660CDEEb8155eAB1A, block.timestamp + fiveYears);
-        _mint(address(timelockFintechProductReward), 3000000000*10**18);
+    uint256 constant _tokenTeamReserve1 = 1.2 * 10**9;
+    uint256 constant _tokenTeamReserve2 = 1.2 * 10**9;
+    uint256 constant _tokenTeamReserve3 = 1.2 * 10**9;
+    uint256 constant _tokenTeamReserve4 = 1.2 * 10**9;
+    uint256 constant _tokenTeamReserve5 = 1.2 * 10**9;
 
-        timelockTraditionalProductReward = new TokenTimelock(this, 0x9B91Ab136427266D0ab922007B24FA9f139BB13F, block.timestamp + fiveYears);
-        _mint(address(timelockTraditionalProductReward), 1500000000*10**18);
+    uint256 constant _tokenLoyalty = 3 * 10**9;
+    uint256 constant _tokenMarketing = 3 * 10**9;
+    uint256 constant _tokenCooperation = 3 * 10**9;
 
-        timelockManagementTeamAdvisors = new TokenTimelock(this, 0x231759F95Db947337fe0a242A512be2D491d8667, block.timestamp + fiveYears);
-        _mint(address(timelockManagementTeamAdvisors), 20000000000*10**18);
+    string constant _tokenName = "BIDCoin";
+    string constant _tokenSymbol = "BID";
 
-        timelockCustomersReward = new TokenTimelock(this, 0x386dAC699F12afC2Ef2eE6841638c636b94B0d5D, block.timestamp + fiveYears);
-        _mint(address(timelockCustomersReward), 1000000000*10**18);
+    address constant _tokenToOfferAddress =
+        0x75a0Cc530AF5fF6D3d4611CaF6422Ebe25CedBf7;
 
-        timelockInternationalListing = new TokenTimelock(this, 0x5c9A7C5d227E0FfFbe3C6696fb4df88cbe69d073, block.timestamp + fiveYears);
-        _mint(address(timelockInternationalListing), 40000000000*10**18);
+    address constant _tokenTeamReserveAddress1 =
+        0xD6bE95f9898Cfe0e942F43e7417a76EBba08F1BA;
+    address constant _tokenTeamReserveAddress2 =
+        0xAD5043D495dF6f7103c04911d0aE1d028F721367;
+    address constant _tokenTeamReserveAddress3 =
+        0x1bBDAf6Bf3b33AAf1181F520c403D98c0deB994E;
+    address constant _tokenTeamReserveAddress4 =
+        0x38e1a68C547171F323AAc8e7A44F2de4dD531dD5;
+    address constant _tokenTeamReserveAddress5 =
+        0x166d5057FbD4881872DD14dB5a662F7dC52c9661;
 
-        timelockSocialResponsibility = new TokenTimelock(this, 0xC3e14541726D7a1066E26daA9f4103EC4138d403, block.timestamp + fiveYears);
-        _mint(address(timelockSocialResponsibility), 500000000*10**18);
+    address constant _tokenLoyaltyAddress =
+        0x7FC663904baB33E9bA5c8306ffb211b91c131040;
 
-        timelockProjectOwners = new TokenTimelock(this, 0x8265Fc259F5b200eca5312B34F2888f614f33367, block.timestamp + fiveYears);
-        _mint(address(timelockProjectOwners), 24000000000*10**18);
+    address constant _tokenMarketingAddress =
+        0xb065f040858c051e0999855a9542ce93A4c1b725;
 
-        timelockStrategicResource = new TokenTimelock(this, 0x2e0BaAAc84Abdad4157ff66C5475BB92c07aED76, block.timestamp + fiveYears);
-        _mint(address(timelockStrategicResource), 20000000000*10**18);
+    address constant _tokenCooperationAddress =
+        0x1ae24Fc66211c9A8bbFa618839B9F9800BCB1eD5;
 
-        timelockBurn = new TokenTimelock(this, 0xF4cb809A6ab645e54c8a7BeDfeDee3331b269b40, block.timestamp + fiveYears);
-        _mint(address(timelockBurn), 10000000000*10**18);
-        // === 5 years lock end ===
+    constructor() ERC20(_tokenName, _tokenSymbol) {
+        // ICO
+        _mint(_tokenToOfferAddress, _tokenToOffer * 10**18);
+
+        // Team reserve
+        teamTimelock1 = new TokenTimelock(
+            this,
+            _tokenTeamReserveAddress1,
+            block.timestamp + 60 * 60 * 24 * 365 * 1
+        );
+        teamTimelock2 = new TokenTimelock(
+            this,
+            _tokenTeamReserveAddress2,
+            block.timestamp + 60 * 60 * 24 * 365 * 2
+        );
+        teamTimelock3 = new TokenTimelock(
+            this,
+            _tokenTeamReserveAddress3,
+            block.timestamp + 60 * 60 * 24 * 365 * 3
+        );
+        teamTimelock4 = new TokenTimelock(
+            this,
+            _tokenTeamReserveAddress4,
+            block.timestamp + 60 * 60 * 24 * 365 * 4
+        );
+        teamTimelock5 = new TokenTimelock(
+            this,
+            _tokenTeamReserveAddress5,
+            block.timestamp + 60 * 60 * 24 * 365 * 5
+        );
+        _mint(address(teamTimelock1), _tokenTeamReserve1 * 10**18);
+        _mint(address(teamTimelock2), _tokenTeamReserve2 * 10**18);
+        _mint(address(teamTimelock3), _tokenTeamReserve3 * 10**18);
+        _mint(address(teamTimelock4), _tokenTeamReserve4 * 10**18);
+        _mint(address(teamTimelock5), _tokenTeamReserve5 * 10**18);
+
+        // Loyalty
+        _mint(_tokenLoyaltyAddress, _tokenLoyalty * 10**18);
+
+        // Marketing
+        _mint(_tokenMarketingAddress, _tokenMarketing * 10**18);
+
+        // Co-operation
+        _mint(_tokenCooperationAddress, _tokenCooperation * 10**18);
+    }
+
+    fallback() external payable {
+        revert();
+    }
+
+    receive() external payable {
+        revert();
     }
 }
