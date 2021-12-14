@@ -1,6 +1,7 @@
-// contracts/BIDCoin.sol
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
+
+// Author: Khashkhuu 'Xass1on' Gankhuyag
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/TokenTimelock.sol";
